@@ -42,4 +42,3 @@ jobs:
           html_body: file://report.html
           from: ${{ secrets.FROMEMAIL }}
           to: ${{ secrets.TOEMAIL }}
-          content_type: text/html

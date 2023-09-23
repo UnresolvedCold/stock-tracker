@@ -1,0 +1,45 @@
+name: send update
+
+on:
+  push:
+  schedule:
+    - cron: "0 5 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - id: report
+        name: Install dependencies and send email
+        run: |
+          pip install -r requirements.txt
+          python main.py
+          # Read text file report.html
+          send_email=true
+          if [ -f report.html ]; then
+            echo "$(cat report.html)"
+          else
+            echo "report=No stocks to buy"
+            send_email=false
+          fi
+          echo "send_email=$send_email" >> $GITHUB_OUTPUT
+          echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
+      -name: Send Email
+        uses: dawidd6/action-send-mail@v3
+        if: steps.report.outputs.send_email == 'true'
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          subject: "Stocks to buy for ${{ steps.report.outputs.date }}"
+          html_body: file://report.html
+          from: ${{ secrets.FROMEMAIL }}
+          to: ${{ secrets.TOEMAIL }}
+          content_type: text/html

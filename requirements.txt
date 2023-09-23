@@ -1,0 +1,4 @@
+pandas
+jugaad_data 
+yfinance 
+pipenv

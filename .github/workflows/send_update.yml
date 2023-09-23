@@ -30,7 +30,7 @@ jobs:
           fi
           echo "send_email=$send_email" >> $GITHUB_OUTPUT
           echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
-      -name: Send Email
+      - name: Send Email
         uses: dawidd6/action-send-mail@v3
         if: steps.report.outputs.send_email == 'true'
         with:

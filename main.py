@@ -8,7 +8,7 @@ def main():
     # get tickers list from tickerlist.txt file
     tickers = []
     rsi_threshold2 = 30
-    rsi_threshold1 = 50
+    rsi_threshold1 = 40
     start_date = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d")
     end_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
@@ -25,7 +25,7 @@ def main():
         stock_price = stock_data['Close'].iloc[-1]
 
         stock_data_dict[ticker] = {
-            'stock_price': stock_price,
+            'stock_price': stock_price.round(2),
             'score': _score
         }
 
